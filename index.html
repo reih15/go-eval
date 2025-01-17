@@ -2,41 +2,150 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>SGF Viewer</title>
+    <title>Go AI Evaluation Viewer (Multiple Choice)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script type="text/javascript" src="wgo/wgo.min.js"></script>
     <script type="text/javascript" src="wgo/wgo.player.min.js"></script>
     <link rel="stylesheet" type="text/css" href="wgo/wgo.player.css" />
     <link rel="stylesheet" type="text/css" href="wgo/wgo.player.css" />
     <style>
-      @media (min-aspect-ratio: 0.7/1) {
+      @media (min-aspect-ratio: 0.6/1) {
         body {
-          margin: 0 calc((100vw - 100vh) / 2 + 15vh);
-          padding: 0.5em;
+          overflow-y: scroll;
+          margin: 0 calc((100vw - 100vh) / 2 + 20vh);
+          padding: 10px 0;
         }
+      }
+
+      .highlight {
+        font-weight: bold;
+      }
+      .eval-value {
+        margin-right: 0.5em;
+      }
+      .board {
+        width: 99.5%;
+        margin-left: 0;
+      }
+      details .board {
+        margin-top: 5px;
+      }
+
+      #main-board {
+        margin-top: 10px;
+      }
+      #game-info {
+        border: 1px double black;
+        margin: 5px 0;
+        border-collapse: collapse;
+      }
+      #game-info td {
+        padding: 0.25em;
+      }
+      #copy-sgf {
+        min-width: 14em;
+        min-height: 2.2em;
+      }
+      #explanation {
+        background-color: azure;
+        margin-top: 10px;
+      }
+      #eval {
+        border: 3px solid black;
+        margin: 10px 0;
+        padding: 3px;
+      }
+      #eval details {
+        border: 1px solid black;
+        margin: 2px 0;
+        padding: 3px;
       }
     </style>
   </head>
   <body>
-    <div id="board">Sorry, something went wrong.</div>
-    <table border="1" style="margin: 0.5em 0">
+    <a id="next-position-top">次の局面へ (Next Position)</a>
+
+    <div class="board" id="main-board">Sorry, something went wrong.</div>
+
+    <table border="1" id="game-info">
       <tr>
         <td align="center">手番 (turn)</td>
-        <td id="turn"></td>
+        <td class="highlight" id="turn"></td>
       </tr>
       <tr>
         <td align="center">コミ (komi)</td>
-        <td id="komi"></td>
+        <td class="highlight" id="komi"></td>
       </tr>
       <tr>
         <td align="center">ルール (rule)</td>
-        <td id="rule"></td>
+        <td class="highlight" id="rule"></td>
       </tr>
       <tr>
         <td align="center">アゲハマ (capture)</td>
-        <td>黒(B): <span id="capture-black">100</span> 白(W): <span id="capture-white">200</span></td>
+        <td>
+          黒(B): <span class="highlight" id="capture-black">100</span> 白(W):
+          <span class="highlight" id="capture-white">200</span>
+        </td>
       </tr>
     </table>
+
+    <button id="copy-sgf">SGF をコピー (Copy SGF)</button>
+
+    <details id="explanation">
+      <summary>説明と注意点 (Explanation and notes)</summary>
+      <p>
+        「KataGo の評価値を見る」を押すと、現在の手番から見た KataGo の評価値が各選択肢に対して表示されます。
+        各選択肢は "<span class="highlight eval-value">[選択肢のラベル]:</span
+        ><span class="highlight eval-value">[勝率]</span><span class="highlight eval-value">[目数差]</span>[探索数]"
+        という形式になっており、クリックするとその後の予想変化図を見ることができます。以下にいくつか注意点を示します。
+      </p>
+
+      <ul>
+        <li>
+          必ずしも評価値が正しいとは限りません。特に難解な死活が絡んでいる場合や、探索数が少ない場合は大きく間違っている可能性が高いです。(探索数を多めにして信頼性がある程度高くなるようにはするつもりです。)
+        </li>
+        <li>選択肢の中に、この局面のあらゆる合法手の中で最善の手が含まれているとは限りません。</li>
+        <li>局面にもよりますが、基本的に予想変化図は後に進むほど着手の信頼性は低くなります。</li>
+      </ul>
+
+      <p>
+        明らかに評価値が間違っている場合や、不具合等ございましたら、<a href="https://x.com/Setonai1">作者のX</a> に DM
+        やメンション等でお知らせください。特に評価値が間違っている場合は URL も添えていただけると助かります。
+      </p>
+
+      <hr />
+
+      <p>
+        Clicking "See KataGo's evaluation" will display KataGo's evaluation values for each choice from the current
+        player's perspective. Each line is in the format of:
+      </p>
+      <p>
+        <span class="highlight eval-value">[Choice Label]:</span><span class="highlight eval-value">[Win Rate]</span
+        ><span class="highlight eval-value">[Score Lead]</span>[Visits]"
+      </p>
+      <p>You can click on a line to see the predicted variations. Please note the following points:</p>
+      <ul>
+        <li>
+          The evaluation values are not always correct. Especially when complex life-and-death situations are involved
+          or when the number of visits is small, there is a high possibility that the values are significantly wrong.
+          (I plan to increase the number of visits to some extent to improve reliability.)
+        </li>
+        <li>The choices may not include the best move among all legal moves in this position.</li>
+        <li>
+          Depending on the position, the reliability of the predicted variations generally decreases as you go further.
+        </li>
+      </ul>
+      <p>
+        If you find obvious errors in the evaluation values or encounter any bugs, please let me know via DM or mention
+        to
+        <a href="https://x.com/Setonai1">the author's X account</a>. Especially when the evaluation values are
+        incorrect, it would be helpful if you could also provide the URL.
+      </p>
+    </details>
+
+    <details id="eval"></details>
+
+    <a id="next-position-bottom">次の局面へ (Next Position)</a>
 
     <script>
       "use strict";
@@ -59,10 +168,6 @@
         const col = gtpCoords.charCodeAt(0) - "A".charCodeAt(0);
         const row = boardYSize - Number(gtpCoords.slice(1));
 
-        console.log(gtpCoords);
-        console.log(gtpCoords.slice(1));
-        console.log(Number(gtpCoords.slice(1)));
-
         if (col >= 8) {
           return [col - 1, row];
         }
@@ -79,15 +184,17 @@
           window.location.href = url.toString();
         }
 
+        document.getElementById("next-position-top").href = url.pathname;
+        document.getElementById("next-position-bottom").href = url.pathname;
+
         const positionId = url.searchParams.get("id");
         if (!allPositions.includes(positionId)) {
           throw new Error(`Invalid positionId: ${positionId}`);
         }
 
         const sgf = await readFile(`./positions/${positionId}/pos.sgf`);
-        console.log(sgf);
 
-        const board = new WGo.BasicPlayer(document.getElementById("board"), {
+        const board = new WGo.BasicPlayer(document.getElementById("main-board"), {
           sgf: sgf,
           layout: { top: ["Control"] },
         });
@@ -98,6 +205,18 @@
         document.getElementById("rule").innerText = board.kifu.info.RU;
         document.getElementById("capture-black").innerText = board.kifuReader.game.getCaptureCount(WGo.B);
         document.getElementById("capture-white").innerText = board.kifuReader.game.getCaptureCount(WGo.W);
+
+        document.getElementById("copy-sgf").addEventListener("click", () => {
+          navigator.clipboard.writeText(sgf);
+
+          const button = document.getElementById("copy-sgf");
+          const originalText = button.textContent;
+          button.textContent = "Copied!";
+
+          setTimeout(() => {
+            button.textContent = originalText;
+          }, 1500);
+        });
 
         const infoString = await readFile(`./positions/${positionId}/info.txt`);
 
@@ -128,8 +247,6 @@
           map.set(xs[0], m);
         }
 
-        console.log(map);
-
         for (const [k, v] of map) {
           const wgoCoords = gtpToWgoCoords(k, board.kifu.size);
           board.board.addObject({
@@ -141,7 +258,7 @@
           });
         }
 
-        const details = document.createElement("details");
+        const details = document.getElementById("eval");
         const summary = document.createElement("summary");
         summary.textContent = `KataGo の評価値を見る (See KataGo's evaluation) [Model: ${modelName}]`;
         details.appendChild(summary);
@@ -156,21 +273,34 @@
 
           const innerDetails = document.createElement("details");
           const s = document.createElement("summary");
-          s.textContent = `${label}: ${winrateString}%, ${scoreLeadString}, ${visits}`;
+
+          const spanLabel = document.createElement("span");
+          spanLabel.textContent = `${label}:`;
+          spanLabel.className = "highlight eval-value";
+          s.appendChild(spanLabel);
+
+          const spanWinrate = document.createElement("span");
+          spanWinrate.textContent = `${winrateString}%`;
+          spanWinrate.className = "highlight eval-value";
+          s.appendChild(spanWinrate);
+
+          const spanScore = document.createElement("span");
+          spanScore.textContent = scoreLeadString;
+          spanScore.className = "highlight eval-value";
+          s.appendChild(spanScore);
+
+          s.appendChild(document.createTextNode(visits));
+
           innerDetails.appendChild(s);
 
           const b = document.createElement("div");
           b.textContent = "Sorry, something went wrong.";
-          b.id = `board-${label}`;
+          b.className = "board";
           innerDetails.appendChild(b);
 
           details.appendChild(innerDetails);
-        }
 
-        document.body.appendChild(details);
-
-        for (const [k, v] of map) {
-          new WGo.BasicPlayer(document.getElementById(`board-${v.get("label")}`), {
+          new WGo.BasicPlayer(b, {
             sgf: await readFile(`./positions/${positionId}/${k}.sgf`),
             layout: { top: ["Control"] },
           });
