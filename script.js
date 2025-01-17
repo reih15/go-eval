@@ -150,6 +150,13 @@ function gtpToWgoCoords(gtpCoords, boardYSize) {
 
     details.appendChild(innerDetails);
 
+    innerDetails.addEventListener("toggle", () => {
+      if (innerDetails.open) {
+        window.dispatchEvent(new Event("resize"));
+        innerDetails.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
+
     new WGo.BasicPlayer(b, {
       sgf: await readFile(`./positions/${positionId}/${k}.sgf`),
       layout: { top: ["Control"] },
