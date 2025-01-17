@@ -49,6 +49,7 @@
       #explanation {
         background-color: azure;
         margin-top: 10px;
+        padding: 5px;
       }
       #eval {
         border: 3px solid black;
@@ -116,14 +117,14 @@
       <hr />
 
       <p>
-        Clicking "See KataGo's evaluation" will display KataGo's evaluation values for each choice from the current
-        player's perspective. Each line is in the format of:
+        If you click "See KataGo's evaluation," you can see KataGo's evaluation from the current player's perspective
+        for each choice. Each choice is shown in the following format:
       </p>
       <p>
-        <span class="highlight eval-value">[Choice Label]:</span><span class="highlight eval-value">[Win Rate]</span
-        ><span class="highlight eval-value">[Score Lead]</span>[Visits]"
+        <span class="highlight eval-value">[Choice Label]:</span><span class="highlight eval-value">[Winrate]</span
+        ><span class="highlight eval-value">[ScoreLead]</span>[Visits]
       </p>
-      <p>You can click on a line to see the predicted variations. Please note the following points:</p>
+      <p>You can click each choice to see the PV (principal variation). Please note the following points:</p>
       <ul>
         <li>
           The evaluation values are not always correct. Especially when complex life-and-death situations are involved
@@ -132,14 +133,14 @@
         </li>
         <li>The choices may not include the best move among all legal moves in this position.</li>
         <li>
-          Depending on the position, the reliability of the predicted variations generally decreases as you go further.
+          It depends on the position, but the reliability of the predicted variations decreases as you go further in
+          general.
         </li>
       </ul>
       <p>
-        If you find obvious errors in the evaluation values or encounter any bugs, please let me know via DM or mention
-        to
-        <a href="https://x.com/Setonai1">the author's X account</a>. Especially when the evaluation values are
-        incorrect, it would be helpful if you could also provide the URL.
+        If you find obvious errors in the evaluation values or encounter any bugs, please let me know via DM, mention,
+        etc. on X (<a href="https://x.com/Setonai1">the author's X account</a>). Especially when the evaluation values
+        are incorrect, I would appreciate it if you could provide the URL of the position.
       </p>
     </details>
 
