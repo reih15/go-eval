@@ -1,0 +1,52 @@
+@media (min-aspect-ratio: 0.6/1) {
+  body {
+    overflow-y: scroll;
+    margin: 0 calc((100vw - 100vh) / 2 + 20vh);
+    padding: 10px 0;
+  }
+}
+
+.highlight {
+  font-weight: bold;
+}
+.eval-value {
+  margin-right: 0.5em;
+}
+.board {
+  width: 99.5%;
+  margin-left: 0;
+}
+details .board {
+  margin-top: 5px;
+}
+
+#main-board {
+  margin-top: 10px;
+}
+#game-info {
+  border: 1px double black;
+  margin: 5px 0;
+  border-collapse: collapse;
+}
+#game-info td {
+  padding: 0.25em;
+}
+#copy-sgf {
+  min-width: 14em;
+  min-height: 2.2em;
+}
+#explanation {
+  background-color: azure;
+  margin-top: 10px;
+  padding: 5px;
+}
+#eval {
+  border: 3px solid black;
+  margin: 10px 0;
+  padding: 3px;
+}
+#eval details {
+  border: 1px solid black;
+  margin: 2px 0;
+  padding: 3px;
+}
